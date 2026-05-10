@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pembuat prompt AI yang membantu menghasilkan perintah berkualitas tinggi untuk ChatGPT, Claude, dan AI tools lainnya dengan template siap pakai berbahasa Indonesia.">
+    <meta name="keywords" content="AI Prompt Generator, ChatGPT, Claude, Gemini, Prompt Engineering, Template Prompt">
+    <meta name="author" content="Rama Harry Widianto">
+    <title>AI Prompt Generator - Pembuat Prompt AI Berbahasa Indonesia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --accent: #e74c3c;
+            --background: #ffffff;
+            --surface: #f8f9fa;
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --border: #ecf0f1;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --error: #e74c3c;
+            --info: #3498db;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #2980b9 100%);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Container */
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 2rem;
+            padding: 2rem 1rem;
+            min-height: calc(100vh - 200px);
+        }
+
+        /* Sidebar */
+        aside {
+            flex: 0 0 280px;
+            background: var(--surface);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        aside h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+        }
+
+        .category-list {
+            list-style: none;
+        }
+
+        .category-item {
+            margin-bottom: 0.75rem;
+        }
+
+        .category-item > button {
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+
+        .category-item > button:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .category-item > button.active {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .subcategory-list {
+            list-style: none;
+            padding-left: 1rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .category-item.expanded .subcategory-list {
+            max-height: 500px;
+        }
+
+        .subcategory-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .subcategory-item button {
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .subcategory-item button:hover {
+            background-color: rgba(52, 152, 219, 0.05);
+            color: var(--primary);
+        }
+
+        .subcategory-item button.active {
+            background-color: rgba(52, 152, 219, 0.15);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Tabs for different views */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            margin-bottom: -2px;
+        }
+
+        .tab-button:hover {
+            color: var(--primary);
+        }
+
+        .tab-button.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Generator Section */
+        .generator-section {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .generator-section h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.75rem;
+        }
+
+        .generator-section p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .label-help {
+            font-weight: normal;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: block;
+            margin-top: 0.25rem;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.2s;
+            resize: vertical;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        textarea {
+            min-height: 100px;
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+
+        /* Form Row */
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Checkboxes */
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 0.5rem;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        /* Preview Section */
+        .preview-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .preview-section h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        #promptPreview {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            padding: 1.5rem;
+            min-height: 200px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        button {
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: none;
+            border-radius: 0.375rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        /* Documentation Sections */
+        .docs-section {
+            display: none;
+        }
+
+        .docs-section.active {
+            display: block;
+        }
+
+        .docs-section h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+        }
+
+        .docs-section h3 {
+            color: var(--text-primary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .docs-section code {
+            background-color: var(--surface);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+            color: var(--accent);
+        }
+
+        .docs-section pre {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .docs-section pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .docs-section ul,
+        .docs-section ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .docs-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Notification */
+        .notification {
+            display: none;
+            position: fixed;
+            bottom: 2rem;
+            right: 1rem;
+            background-color: var(--success);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.375rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 2rem 1rem;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 3rem;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            aside {
+                position: relative;
+                top: 0;
+                flex: none;
+            }
+
+            header h1 {
+                font-size: 1.75rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-buttons button {
+                width: 100%;
+            }
+
+            .generator-section {
+                padding: 1rem;
+            }
+
+            #promptPreview {
+                max-height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            .container {
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            aside {
+                padding: 1rem;
+            }
+
+            .generator-section {
+                padding: 1rem;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .tab-button {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Markdown content styling */
+        .markdown-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .markdown-table th,
+        .markdown-table td {
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        .markdown-table th {
+            background-color: var(--surface);
+            font-weight: 600;
+        }
+
+        /* Hidden content - will show with JS */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>🤖 AI Prompt Generator</h1>
+        <p>Pembuat Prompt AI yang Intuitif untuk ChatGPT, Claude, Gemini & Tools Lainnya</p>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar - Categories -->
+        <aside>
+            <h2>📁 Kategori Template</h2>
+            <ul class="category-list" id="categoryList">
+                <li class="category-item">
+                    <button class="category-toggle">💻 Pengembangan Kode</button>
+                    <ul class="subcategory-list">
+                        <li class="subcategory-item"><button class="template-button" data-template="api-generation">API Generation</button></li>
+                        <li class="subcategory-item"><button class="template-button" data-template="debugging">Debugging & Troubleshooting</button></li>
+                        <li class="subcategory-item"><button class="template-button" data-template="code-review">Code Review</button></li>
+                    </ul>
+                </li>
+                <li class="category-item">
+                    <button class="category-toggle">📖 Dokumentasi</button>
+                    <ul class="subcategory-list">
+                        <li class="subcategory-item"><button class="template-button" data-template="api-docs">API Documentation</button></li>
+                        <li class="subcategory-item"><button class="template-button" data-template="readme">README Generator</button></li>
+                        <li class="subcategory-item"><button class="template-button" data-template="tech-spec">Technical Spec</button></li>
+                    </ul>
+                </li>
+                <li class="category-item">
+                    <button class="category-toggle">✍️ Konten & Copywriting</button>
+                    <ul class="subcategory-list">
+                        <li class="subcategory-item"><button class="template-button" data-template="blog-post">Blog Post</button></li>
+                        <li class="subcategory-item"><button class="template-button" data-template="product-description">Product Description</button></li>
+                    </ul>
+                </li>
+                <li class="category-item">
+                    <button class="category-toggle">📊 Analisis & Riset</button>
+                    <ul class="subcategory-list">
+                        <li class="subcategory-item"><button class="template-button" data-template="data-analysis">Data Analysis</button></li>
+                        <li class="subcategory-item"><button class="template-button" data-template="research-report">Research Report</button></li>
+                    </ul>
+                </li>
+                <li class="category-item">
+                    <button class="category-toggle">🎓 Training & Edukasi</button>
+                    <ul class="subcategory-list">
+                        <li class="subcategory-item"><button class="template-button" data-template="tutorial">Tutorial/How-To</button></li>
+                        <li class="subcategory-item"><button class="template-button" data-template="concept-explanation">Concept Explanation</button></li>
+                    </ul>
+                </li>
+                <li class="category-item">
+                    <button class="category-toggle">💡 Creative & Brainstorming</button>
+                    <ul class="subcategory-list">
+                        <li class="subcategory-item"><button class="template-button" data-template="feature-ideas">Feature Brainstorming</button></li>
+                        <li class="subcategory-item"><button class="template-button" data-template="naming">Naming & Branding</button></li>
+                    </ul>
+                </li>
+                <li class="category-item">
+                    <button class="category-toggle">🏗️ System Design</button>
+                    <ul class="subcategory-list">
+                        <li class="subcategory-item"><button class="template-button" data-template="architecture">Architecture Design</button></li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Tab Navigation -->
+            <div class="tabs">
+                <button class="tab-button active" data-tab="generator">🎯 Generator Prompt</button>
+                <button class="tab-button" data-tab="documentation">📚 Dokumentasi</button>
+                <button class="tab-button" data-tab="favorites">⭐ Favorit</button>
+            </div>
+
+            <!-- Tab 1: Generator Section -->
+            <div id="generator" class="tab-content" style="display: block;">
+                <section class="generator-section">
+                    <h2>Pembuat Prompt AI</h2>
+                    <p>Pilih template dari kategori di samping, isi formulir, dan lihat preview prompt Anda yang siap digunakan dengan AI tools favorit.</p>
+
+                    <form id="templateForm">
+                        <div id="formContainer">
+                            <!-- Dynamic form akan di-generate di sini -->
+                            <p style="color: var(--text-secondary);">Pilih template dari kategori di samping untuk memulai.</p>
+                        </div>
+                    </form>
+
+                    <!-- Preview Section -->
+                    <div class="preview-section">
+                        <h3>📋 Preview Prompt</h3>
+                        <div id="promptPreview">Pilih template untuk melihat preview prompt yang akan di-generate...</div>
+                        <div class="action-buttons">
+                            <button class="btn-primary" id="copyButton">📋 Salin ke Clipboard</button>
+                            <button class="btn-secondary" id="saveButton">💾 Simpan sebagai Favorit</button>
+                            <button class="btn-outline" id="exportButton">📥 Export as TXT</button>
+                            <button class="btn-outline" id="resetButton">🔄 Reset Form</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Tab 2: Documentation Section -->
+            <div id="documentation" class="tab-content" style="display: none;">
+                <section class="generator-section">
+                    <h2>📚 Dokumentasi & Panduan</h2>
+
+                    <div class="docs-section active" id="docs-guide">
+                        <h3>🚀 Panduan Cepat</h3>
+                        <ol>
+                            <li><strong>Pilih Template:</strong> Klik kategori di sidebar untuk melihat pilihan template</li>
+                            <li><strong>Isi Formulir:</strong> Lengkapi semua field yang diperlukan dengan informasi spesifik</li>
+                            <li><strong>Lihat Preview:</strong> Prompt akan di-generate secara real-time di panel preview</li>
+                            <li><strong>Salin & Gunakan:</strong> Salin prompt dan paste ke ChatGPT, Claude, atau AI tool favorit Anda</li>
+                            <li><strong>Iterasi Jika Perlu:</strong> Ubah field dan regenerate hingga hasilnya memuaskan</li>
+                        </ol>
+
+                        <h3>💡 Tips Efektif</h3>
+                        <ul>
+                            <li><strong>Spesifik:</strong> Semakin detail informasi yang Anda berikan, semakin baik hasilnya</li>
+                            <li><strong>Konteks:</strong> Berikan background/konteks yang cukup untuk AI memahami kebutuhan</li>
+                            <li><strong>Format:</strong> Tentukan format output yang diinginkan (code, markdown, JSON, dll)</li>
+                            <li><strong>Iterasi:</strong> Jika hasil kurang memuaskan, refine prompt dan coba lagi</li>
+                            <li><strong>Simpan:</strong> Simpan prompt yang berhasil untuk penggunaan ulang di masa depan</li>
+                        </ul>
+
+                        <h3>🎯 Kasus Penggunaan</h3>
+                        <ul>
+                            <li>Dokumentasi API otomatis</li>
+                            <li>Generate kode boilerplate</li>
+                            <li>Debugging error & troubleshooting</li>
+                            <li>Membuat konten blog & artikel</li>
+                            <li>Analisis data & report generation</li>
+                            <li>Brainstorming fitur & ide produk</li>
+                            <li>Pembuatan tutorial & panduan</li>
+                            <li>Desain sistem & architecture</li>
+                        </ul>
+                    </div>
+
+                    <div class="docs-section" id="docs-templates">
+                        <h3>📋 Template yang Tersedia</h3>
+                        <p>Website ini menyediakan <strong>15+ template prompt</strong> yang siap pakai, tersusun dalam 7 kategori:</p>
+                        <ul>
+                            <li><strong>Pengembangan Kode:</strong> API Generation, Debugging, Code Review</li>
+                            <li><strong>Dokumentasi:</strong> API Docs, README, Technical Specification</li>
+                            <li><strong>Konten & Copywriting:</strong> Blog Post, Product Description</li>
+                            <li><strong>Analisis & Riset:</strong> Data Analysis, Research Report</li>
+                            <li><strong>Training & Edukasi:</strong> Tutorial, Concept Explanation</li>
+                            <li><strong>Creative:</strong> Feature Brainstorming, Naming & Branding</li>
+                            <li><strong>System Design:</strong> Architecture Design</li>
+                        </ul>
+                        <p style="margin-top: 1rem; color: var(--text-secondary);"><em>Lihat file <code>Template.md</code> untuk deskripsi detail setiap template.</em></p>
+                    </div>
+
+                    <div class="docs-section" id="docs-ai">
+                        <h3>🤖 Tentang AI & Prompting</h3>
+                        <p><strong>ChatGPT</strong> dan AI tools lainnya bekerja dengan menerima "prompt" (perintah) dari pengguna, kemudian menghasilkan response berdasarkan prompt tersebut.</p>
+                        <p><strong>Kualitas prompt menentukan kualitas hasil.</strong> Prompt yang baik akan menghasilkan response yang lebih akurat, relevan, dan berguna.</p>
+
+                        <h4>Karakteristik Prompt yang Baik:</h4>
+                        <ul>
+                            <li><strong>Jelas & Spesifik:</strong> Tidak ambigu, menunjukkan dengan jelas apa yang diinginkan</li>
+                            <li><strong>Kontekstual:</strong> Memberikan latar belakang informasi yang cukup</li>
+                            <li><strong>Terstruktur:</strong> Menggunakan struktur yang logis (bullets, numbering, sections)</li>
+                            <li><strong>Format-conscious:</strong> Menentukan format output yang diinginkan</li>
+                            <li><strong>Iteratif:</strong> Siap untuk refine berdasarkan hasil awal</li>
+                        </ul>
+
+                        <p style="margin-top: 1rem; color: var(--text-secondary);"><em>Baca file <code>chatgpt.md</code> untuk panduan lengkap tentang AI & prompting.</em></p>
+                    </div>
+
+                    <div class="docs-section" id="docs-tech">
+                        <h3>🛠️ Tech Stack</h3>
+                        <p>Website ini dibangun dengan teknologi modern yang ringan dan performant:</p>
+                        <ul>
+                            <li><strong>HTML5:</strong> Struktur semantic & accessible</li>
+                            <li><strong>CSS3:</strong> Responsive design, no framework bloat</li>
+                            <li><strong>Vanilla JavaScript:</strong> Interactivity tanpa dependencies</li>
+                            <li><strong>LocalStorage:</strong> Data persistence di browser</li>
+                            <li><strong>Python (Optional):</strong> Scripts untuk automation</li>
+                        </ul>
+                        <p style="margin-top: 1rem;"><strong>Keuntungan:</strong> Cepat, ringan, bisa offline, bisa di-deploy di server statis apapun.</p>
+                        <p style="color: var(--text-secondary);"><em>Lihat file <code>Tech-Stack.md</code> untuk justifikasi lengkap pilihan teknologi.</em></p>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Tab 3: Favorites Section -->
+            <div id="favorites" class="tab-content" style="display: none;">
+                <section class="generator-section">
+                    <h2>⭐ Prompt Favorit Saya</h2>
+                    <p>Prompt yang Anda simpan akan tersimpan di sini. Anda dapat melihat, menyalin, atau menghapusnya.</p>
+
+                    <div id="favoritesList" style="margin-top: 1.5rem;">
+                        <p style="color: var(--text-secondary);">Belum ada prompt favorit. Simpan prompt dari generator untuk melihatnya di sini.</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>AI Prompt Generator</strong> - Pembuat Prompt AI Berbahasa Indonesia</p>
+        <p>Dibuat untuk memudahkan Anda menggunakan ChatGPT, Claude, Gemini & AI tools lainnya</p>
+        <p>
+            <small>
+                📚 <a href="#" onclick="showDoc('docs-guide')">Panduan</a> | 
+                📋 <a href="#" onclick="showDoc('docs-templates')">Template</a> | 
+                🤖 <a href="#" onclick="showDoc('docs-ai')">Tentang AI</a> | 
+                🛠️ <a href="#" onclick="showDoc('docs-tech')">Tech Stack</a>
+            </small>
+        </p>
+        <p><small>© 2026 Rama Harry Widianto | <a href="https://github.com/ramaharrywidianto" target="_blank">GitHub</a></small></p>
+    </footer>
+
+    <script>
+        // Application State
+        const app = {
+            currentTemplate: null,
+            favorites: [],
+            templates: {
+                'api-generation': {
+                    name: 'REST API Generator',
+                    description: 'Hasilkan dokumentasi endpoint REST API',
+                    fields: [
+                        { name: 'framework', label: 'Framework', type: 'select', options: ['Python FastAPI', 'Node.js Express', 'Laravel', 'Django'], required: true },
+                        { name: 'method', label: 'HTTP Method', type: 'select', options: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], required: true },
+                        { name: 'resource', label: 'Resource Name', type: 'text', required: true },
+                        { name: 'features', label: 'Fitur Utama (pisahkan dengan koma)', type: 'textarea', required: true }
+                    ],
+                    template: (data) => `Buatkan endpoint API REST untuk:\n- Framework: ${data.framework}\n- Method: ${data.method}\n- Resource: ${data.resource}\n- Fitur: ${data.features}\n\nInclude:\n* Validasi input\n* Error handling\n* Response format JSON\n* Comments/dokumentasi\n\nFormat output: Code block dengan penjelasan`
+                },
+                'debugging': {
+                    name: 'Bug Fix Assistant',
+                    description: 'Bantuan debugging & troubleshooting',
+                    fields: [
+                        { name: 'errorMessage', label: 'Error Message atau Issue', type: 'textarea', required: true },
+                        { name: 'language', label: 'Bahasa/Framework', type: 'text', required: true },
+                        { name: 'context', label: 'Konteks (apa yang sedang dilakukan)', type: 'textarea', required: true }
+                    ],
+                    template: (data) => `Error/Issue yang dihadapi:\n${data.errorMessage}\n\nKonteks:\n- Bahasa/Framework: ${data.language}\n- Operasi: ${data.context}\n\nBantuan yang dibutuhkan:\n- Identifikasi root cause\n- Solusi step-by-step\n- Penjelasan mengapa terjadi\n- Preventive measures untuk masa depan`
+                },
+                'code-review': {
+                    name: 'Code Review Expert',
+                    description: 'Review kode untuk optimasi & best practices',
+                    fields: [
+                        { name: 'code', label: 'Kode yang ingin di-review', type: 'textarea', required: true },
+                        { name: 'language', label: 'Bahasa Pemrograman', type: 'text', required: true },
+                        { name: 'focus', label: 'Fokus Review (pisahkan dengan koma)', type: 'text', placeholder: 'e.g., Performance, Security, Readability' }
+                    ],
+                    template: (data) => `Review code berikut:\n\n\`\`\`${data.language}\n${data.code}\n\`\`\`\n\nFokus review pada:\n1. ${data.focus || 'Performance, Best practices, Security, Readability'}\n2. Potential bugs\n\nOutput format:\n- Issues found dengan severity\n- Recommended fixes dengan code snippets\n- Explanation untuk setiap issue`
+                },
+                'api-docs': {
+                    name: 'API Documentation',
+                    description: 'Generate dokumentasi API lengkap',
+                    fields: [
+                        { name: 'apiName', label: 'Nama API', type: 'text', required: true },
+                        { name: 'baseUrl', label: 'Base URL', type: 'text', required: true },
+                        { name: 'endpoints', label: 'Endpoints (format: METHOD /path - deskripsi)', type: 'textarea', required: true },
+                        { name: 'authType', label: 'Tipe Autentikasi', type: 'text', placeholder: 'e.g., JWT Bearer Token' }
+                    ],
+                    template: (data) => `Buatkan dokumentasi API untuk:\n\nAPI Name: ${data.apiName}\nBase URL: ${data.baseUrl}\nAuthentication: ${data.authType}\n\nEndpoints:\n${data.endpoints}\n\nInclude dalam dokumentasi:\n1. Overview\n2. Authentication method\n3. Endpoints dengan Method HTTP, Path, Parameters\n4. Request/Response examples\n5. Error handling\n6. Status codes\n\nFormat: Markdown dengan code blocks`
+                },
+                'readme': {
+                    name: 'README Generator',
+                    description: 'Buat README.md project yang lengkap',
+                    fields: [
+                        { name: 'projectName', label: 'Nama Project', type: 'text', required: true },
+                        { name: 'description', label: 'Deskripsi Project', type: 'textarea', required: true },
+                        { name: 'techStack', label: 'Tech Stack (pisahkan dengan koma)', type: 'text', required: true },
+                        { name: 'features', label: 'Fitur Utama (pisahkan dengan koma)', type: 'textarea', required: true }
+                    ],
+                    template: (data) => `Buatkan README untuk project:\n\nProject Name: ${data.projectName}\nDescription: ${data.description}\nTech Stack: ${data.techStack}\n\nKey Features:\n${data.features.split(',').map(f => `- ${f.trim()}`).join('\\n')}\n\nInclude sections:\n1. 📋 Overview\n2. ✨ Features\n3. 🚀 Installation\n4. 📖 Usage\n5. 🏗️ Project Structure\n6. 🛠️ Technologies\n7. 🧪 Testing\n8. 📝 License\n9. 👤 Author\n10. 🤝 Contributing\n\nFormat: Markdown dengan emoji dan code blocks`
+                },
+                'tech-spec': {
+                    name: 'Technical Specification',
+                    description: 'Buat technical specification document',
+                    fields: [
+                        { name: 'systemName', label: 'Nama Sistem/Fitur', type: 'text', required: true },
+                        { name: 'scope', label: 'Scope/Deskripsi', type: 'textarea', required: true },
+                        { name: 'requirements', label: 'Requirement Utama (pisahkan dengan koma)', type: 'textarea', required: true }
+                    ],
+                    template: (data) => `Buatkan Technical Specification untuk:\n\nSystem/Feature: ${data.systemName}\nScope: ${data.scope}\n\nInclude:\n1. Overview & Goals\n2. Functional Requirements\n3. Non-Functional Requirements\n4. Architecture Design\n5. Database Schema\n6. API Specifications\n7. Security Considerations\n8. Performance Requirements\n9. Testing Strategy\n10. Deployment Plan\n\nRequirements Utama:\n${data.requirements}\n\nFormat: Markdown dengan diagrams (ASCII art)`
+                },
+                'blog-post': {
+                    name: 'Blog Post Writer',
+                    description: 'Tulis artikel blog teknis',
+                    fields: [
+                        { name: 'topic', label: 'Topik Artikel', type: 'text', required: true },
+                        { name: 'audience', label: 'Target Audience', type: 'text', placeholder: 'e.g., Developers, Beginners, Enterprise' },
+                        { name: 'length', label: 'Target Word Count', type: 'text', placeholder: 'e.g., 1000-1500' },
+                        { name: 'keyPoints', label: 'Key Points (pisahkan dengan koma)', type: 'textarea', required: true }
+                    ],
+                    template: (data) => `Tulis artikel blog tentang:\n- Topik: ${data.topic}\n- Target Audience: ${data.audience}\n- Panjang: ${data.length} kata\n\nKey Points:\n${data.keyPoints.split(',').map(p => `- ${p.trim()}`).join('\\n')}\n\nStruktur artikel:\n1. Judul menarik\n2. Intro (hook)\n3. Main content sections\n4. Contoh praktis\n5. Kesimpulan\n6. Call-to-action\n\nFormat: Markdown dengan heading & bullet points`
+                },
+                'product-description': {
+                    name: 'Product Copy Writer',
+                    description: 'Tulis deskripsi produk/layanan',
+                    fields: [
+                        { name: 'productName', label: 'Nama Produk', type: 'text', required: true },
+                        { name: 'productType', label: 'Tipe Produk', type: 'text', placeholder: 'e.g., SaaS, Mobile App' },
+                        { name: 'targetMarket', label: 'Target Market', type: 'text', required: true },
+                        { name: 'benefits', label: 'Main Benefits (pisahkan dengan koma)', type: 'textarea', required: true }
+                    ],
+                    template: (data) => `Tulis deskripsi produk/layanan:\n- Nama: ${data.productName}\n- Tipe: ${data.productType}\n- Target Market: ${data.targetMarket}\n- Benefits: ${data.benefits}\n\nBuat deskripsi untuk:\n- Website (150-200 kata)\n- Social Media (50-100 kata)\n- Email Campaign (100-150 kata)\n\nTone: Persuasive & Informative\nInclude: Main benefits, unique selling points, call-to-action`
+                },
+                'data-analysis': {
+                    name: 'Data Analysis Report',
+                    description: 'Analisis data & buat insights',
+                    fields: [
+                        { name: 'dataDescription', label: 'Deskripsi Data', type: 'textarea', required: true },
+                        { name: 'metrics', label: 'Key Metrics (pisahkan dengan koma)', type: 'textarea', required: true },
+                        { name: 'period', label: 'Time Period', type: 'text', placeholder: 'e.g., Q1 2026' }
+                    ],
+                    template: (data) => `Analisis data berikut:\n\nDataset: ${data.dataDescription}\nTime Period: ${data.period}\nMetrics: ${data.metrics}\n\nAnalisis:\n1. Trend identification\n2. Anomaly detection\n3. Correlation analysis\n4. Key insights\n5. Recommendations\n\nOutput: Summary findings, supporting data points, actionable recommendations`
+                },
+                'research-report': {
+                    name: 'Research Report Generator',
+                    description: 'Buat research & market report',
+                    fields: [
+                        { name: 'topic', label: 'Research Topic', type: 'text', required: true },
+                        { name: 'industry', label: 'Industry/Niche', type: 'text', required: true },
+                        { name: 'scope', label: 'Geographic Scope', type: 'text', placeholder: 'e.g., Global, Asia, Indonesia' },
+                        { name: 'depth', label: 'Depth Level', type: 'select', options: ['Brief', 'Comprehensive'], required: true }
+                    ],
+                    template: (data) => `Buatkan research report tentang:\n- Topic: ${data.topic}\n- Market/Industry: ${data.industry}\n- Geographic scope: ${data.scope}\n- Depth: ${data.depth}\n\nInclude sections:\n1. Executive Summary\n2. Market Overview\n3. Key Players/Competitors\n4. Trends & Opportunities\n5. Challenges & Threats\n6. Market Size & Growth\n7. Recommendations\n8. Sources & References\n\nFormat: Markdown report dengan insights mendalam`
+                },
+                'tutorial': {
+                    name: 'Tutorial Creator',
+                    description: 'Buat tutorial step-by-step',
+                    fields: [
+                        { name: 'topic', label: 'Tutorial Topic', type: 'text', required: true },
+                        { name: 'skillLevel', label: 'Skill Level', type: 'select', options: ['Beginner', 'Intermediate', 'Advanced'], required: true },
+                        { name: 'duration', label: 'Estimated Duration', type: 'text', placeholder: 'e.g., 30 minutes' },
+                        { name: 'prerequisites', label: 'Prerequisites (pisahkan dengan koma)', type: 'text', required: true }
+                    ],
+                    template: (data) => `Buatkan tutorial untuk:\n- Topik: ${data.topic}\n- Skill Level: ${data.skillLevel}\n- Duration: ${data.duration}\n\nPrerequisites: ${data.prerequisites}\n\nFormat tutorial:\n1. Prerequisites\n2. Overview/Introduction\n3. Step-by-step instructions (numbered, clear)\n4. Screenshots descriptions\n5. Common mistakes & solutions\n6. Tips & tricks\n7. Further learning resources\n\nInclude: Code examples, expected output, troubleshooting section`
+                },
+                'concept-explanation': {
+                    name: 'Concept Explainer',
+                    description: 'Jelaskan konsep dengan simple',
+                    fields: [
+                        { name: 'concept', label: 'Konsep yang dijelaskan', type: 'text', required: true },
+                        { name: 'audience', label: 'Target Audience', type: 'text', placeholder: 'e.g., Beginner, Technical' },
+                        { name: 'context', label: 'Konteks/Use Case', type: 'textarea', required: true }
+                    ],
+                    template: (data) => `Jelaskan konsep berikut dengan cara yang sederhana:\n- Konsep: ${data.concept}\n- Target Audience: ${data.audience}\n- Konteks: ${data.context}\n\nPenjelasan harus include:\n1. Simple definition (1-2 kalimat)\n2. Analogi/perumpamaan\n3. Breakdown into components\n4. Real-world examples\n5. Common misconceptions\n6. Practical applications\n\nGunakan: Simple language, visual descriptions, concrete examples\nHindari: Unnecessary jargon`
+                },
+                'feature-ideas': {
+                    name: 'Feature Brainstorming',
+                    description: 'Brainstorm fitur produk baru',
+                    fields: [
+                        { name: 'product', label: 'Product/Platform', type: 'text', required: true },
+                        { name: 'problem', label: 'Problem to Solve', type: 'textarea', required: true },
+                        { name: 'userPersona', label: 'Target User Persona', type: 'text', required: true }
+                    ],
+                    template: (data) => `Brainstorm fitur baru untuk:\n- Product/Platform: ${data.product}\n- Problem to solve: ${data.problem}\n- User persona: ${data.userPersona}\n\nGenerate:\n- 5-10 ide fitur potensial\n- Untuk setiap idea: description, user benefit, implementation complexity\n- Prioritas berdasarkan impact & effort\n- Implementation timeline estimate\n\nFormat: Structured list dengan analysis, ranked by priority`
+                },
+                'naming': {
+                    name: 'Brand Name Generator',
+                    description: 'Sarankan nama produk/startup',
+                    fields: [
+                        { name: 'description', label: 'Deskripsi Produk/Startup', type: 'textarea', required: true },
+                        { name: 'industry', label: 'Industry/Niche', type: 'text', required: true },
+                        { name: 'personality', label: 'Brand Personality', type: 'text', placeholder: 'e.g., Playful, Professional, Innovative' },
+                        { name: 'targetMarket', label: 'Target Market', type: 'text', required: true }
+                    ],
+                    template: (data) => `Sarankan nama untuk:\n- Produk/Startup: ${data.description}\n- Industry/Niche: ${data.industry}\n- Brand personality: ${data.personality}\n- Target market: ${data.targetMarket}\n\nGenerate:\n- 10-15 nama option\n- Check availability indication\n- Domain name possibility\n- Brief explanation untuk setiap nama\n\nCriteria: Memorable, Unique, Relevant, Easy to pronounce`
+                },
+                'architecture': {
+                    name: 'System Architecture Design',
+                    description: 'Design system architecture',
+                    fields: [
+                        { name: 'appName', label: 'Application Name', type: 'text', required: true },
+                        { name: 'scale', label: 'Expected Scale', type: 'text', placeholder: 'e.g., 1M users, 1K requests/sec' },
+                        { name: 'requirements', label: 'Key Requirements (pisahkan dengan koma)', type: 'textarea', required: true },
+                        { name: 'constraints', label: 'Constraints (pisahkan dengan koma)', type: 'textarea' }
+                    ],
+                    template: (data) => `Design system architecture untuk:\n- Application: ${data.appName}\n- Scale: ${data.scale}\n- Requirements: ${data.requirements}\n- Constraints: ${data.constraints}\n\nInclude:\n1. High-level architecture diagram (ASCII)\n2. Component breakdown\n3. Database design\n4. API layer\n5. Caching strategy\n6. Scalability approach\n7. Deployment architecture\n8. Monitoring & logging\n9. Security architecture\n\nConsiderations: Performance, Availability, Security, Maintainability`
+                }
+            }
+        };
+
+        // Initialize
+        function init() {
+            loadFavorites();
+            setupEventListeners();
+        }
+
+        // Setup Event Listeners
+        function setupEventListeners() {
+            // Tab buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+                    e.target.classList.add('active');
+                    const tabId = e.target.dataset.tab;
+                    document.getElementById(tabId).style.display = 'block';
+                });
+            });
+
+            // Category toggles
+            document.querySelectorAll('.category-toggle').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const parent = e.target.parentElement;
+                    parent.classList.toggle('expanded');
+                });
+            });
+
+            // Template buttons
+            document.querySelectorAll('.template-button').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const templateId = e.target.dataset.template;
+                    loadTemplate(templateId);
+                });
+            });
+
+            // Form actions
+            document.getElementById('copyButton').addEventListener('click', copyPrompt);
+            document.getElementById('saveButton').addEventListener('click', savePrompt);
+            document.getElementById('exportButton').addEventListener('click', exportPrompt);
+            document.getElementById('resetButton').addEventListener('click', resetForm);
+
+            // Form input listener for real-time preview
+            document.getElementById('templateForm').addEventListener('input', updatePreview);
+        }
+
+        // Load Template
+        function loadTemplate(templateId) {
+            const template = app.templates[templateId];
+            if (!template) return;
+
+            app.currentTemplate = templateId;
+
+            // Generate form
+            let formHTML = `<h3>${template.name}</h3><p>${template.description}</p>`;
+            
+            template.fields.forEach(field => {
+                const required = field.required ? ' required' : '';
+                const requiredText = field.required ? ' *' : '';
+                
+                formHTML += `<div class="form-group">`;
+                formHTML += `<label>${field.label}${requiredText}`;
+                if (field.name === 'code' || field.name === 'context') {
+                    formHTML += `<span class="label-help">Paste kode atau konteks lengkap</span>`;
+                }
+                formHTML += `</label>`;
+
+                if (field.type === 'textarea') {
+                    formHTML += `<textarea name="${field.name}"${required}></textarea>`;
+                } else if (field.type === 'select') {
+                    formHTML += `<select name="${field.name}"${required}>`;
+                    formHTML += `<option value="">-- Pilih --</option>`;
+                    field.options.forEach(opt => {
+                        formHTML += `<option value="${opt}">${opt}</option>`;
+                    });
+                    formHTML += `</select>`;
+                } else {
+                    formHTML += `<input type="${field.type}" name="${field.name}" placeholder="${field.placeholder || ''}"${required} />`;
+                }
+                formHTML += `</div>`;
+            });
+
+            document.getElementById('formContainer').innerHTML = formHTML;
+            updatePreview();
+
+            // Highlight selected template
+            document.querySelectorAll('.template-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[data-template="${templateId}"]`).classList.add('active');
+        }
+
+        // Update Preview
+        function updatePreview() {
+            if (!app.currentTemplate) return;
+
+            const template = app.templates[app.currentTemplate];
+            const formData = new FormData(document.getElementById('templateForm'));
+            const data = Object.fromEntries(formData);
+
+            // Check if all required fields are filled
+            const form = document.getElementById('templateForm');
+            const missingRequired = template.fields.filter(f => f.required && !data[f.name]);
+
+            if (missingRequired.length > 0) {
+                document.getElementById('promptPreview').textContent = `⚠️ Mohon isi semua field yang wajib: ${missingRequired.map(f => f.label).join(', ')}`;
+                return;
+            }
+
+            const prompt = template.template(data);
+            document.getElementById('promptPreview').textContent = prompt;
+        }
+
+        // Copy Prompt
+        function copyPrompt() {
+            const preview = document.getElementById('promptPreview');
+            const text = preview.textContent;
+
+            if (!text || text.includes('Pilih template')) {
+                showNotification('Buat prompt terlebih dahulu!', 'warning');
+                return;
+            }
+
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showNotification('✓ Prompt berhasil disalin ke clipboard!');
+                });
+            } else {
+                // Fallback
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showNotification('✓ Prompt berhasil disalin!');
+            }
+        }
+
+        // Save Prompt
+        function savePrompt() {
+            const preview = document.getElementById('promptPreview');
+            const text = preview.textContent;
+
+            if (!text || text.includes('Pilih template')) {
+                showNotification('Buat prompt terlebih dahulu!', 'warning');
+                return;
+            }
+
+            const favorite = {
+                id: Date.now(),
+                template: app.currentTemplate,
+                content: text,
+                timestamp: new Date().toLocaleString('id-ID')
+            };
+
+            app.favorites.push(favorite);
+            localStorage.setItem('promptFavorites', JSON.stringify(app.favorites));
+            showNotification('⭐ Prompt berhasil disimpan ke Favorit!');
+            updateFavoritesView();
+        }
+
+        // Export Prompt
+        function exportPrompt() {
+            const preview = document.getElementById('promptPreview');
+            const text = preview.textContent;
+
+            if (!text || text.includes('Pilih template')) {
+                showNotification('Buat prompt terlebih dahulu!', 'warning');
+                return;
+            }
+
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', `prompt-${Date.now()}.txt`);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+            showNotification('📥 Prompt berhasil di-export!');
+        }
+
+        // Reset Form
+        function resetForm() {
+            document.getElementById('templateForm').reset();
+            updatePreview();
+            showNotification('🔄 Form berhasil direset');
+        }
+
+        // Load Favorites from LocalStorage
+        function loadFavorites() {
+            const stored = localStorage.getItem('promptFavorites');
+            app.favorites = stored ? JSON.parse(stored) : [];
+        }
+
+        // Update Favorites View
+        function updateFavoritesView() {
+            const container = document.getElementById('favoritesList');
+
+            if (app.favorites.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-secondary);">Belum ada prompt favorit.</p>';
+                return;
+            }
+
+            container.innerHTML = app.favorites.map(fav => `
+                <div class="generator-section" style="margin-bottom: 1rem;">
+                    <h4>${app.templates[fav.template]?.name || 'Unknown Template'}</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Disimpan: ${fav.timestamp}</p>
+                    <div style="background: var(--surface); padding: 1rem; border-radius: 0.375rem; margin: 1rem 0; max-height: 200px; overflow-y: auto; font-family: monospace; font-size: 0.9rem; white-space: pre-wrap; word-wrap: break-word;">
+                        ${fav.content}
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn-primary" style="flex: 1;" onclick="copyFavorite(${fav.id})">📋 Salin</button>
+                        <button class="btn-outline" style="flex: 1;" onclick="deleteFavorite(${fav.id})">🗑️ Hapus</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Copy Favorite
+        window.copyFavorite = function(id) {
+            const fav = app.favorites.find(f => f.id === id);
+            if (fav && navigator.clipboard) {
+                navigator.clipboard.writeText(fav.content).then(() => {
+                    showNotification('✓ Favorit disalin ke clipboard!');
+                });
+            }
+        };
+
+        // Delete Favorite
+        window.deleteFavorite = function(id) {
+            app.favorites = app.favorites.filter(f => f.id !== id);
+            localStorage.setItem('promptFavorites', JSON.stringify(app.favorites));
+            updateFavoritesView();
+            showNotification('🗑️ Favorit berhasil dihapus');
+        };
+
+        // Show Documentation
+        window.showDoc = function(docId) {
+            document.querySelectorAll('.docs-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(docId).classList.add('active');
+            document.querySelector('[data-tab="documentation"]').click();
+        };
+
+        // Show Notification
+        function showNotification(message, type = 'success') {
+            const notif = document.getElementById('notification');
+            notif.textContent = message;
+            notif.className = 'notification show';
+            notif.style.backgroundColor = type === 'warning' ? 'var(--warning)' : 'var(--success)';
+            
+            setTimeout(() => {
+                notif.classList.remove('show');
+            }, 3000);
+        }
+
+        // Show favorites on tab click
+        document.addEventListener('DOMContentLoaded', () => {
+            const favTab = document.querySelector('[data-tab="favorites"]');
+            if (favTab) {
+                favTab.addEventListener('click', updateFavoritesView);
+            }
+        });
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
